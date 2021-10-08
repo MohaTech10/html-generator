@@ -6,7 +6,7 @@
 ### So I decided to comeup with a thing can teach me both how to design a simple systme, You know objects messaging and data structuring system- Html-generator
 
 
-How without writing a interpreter/html-parser, Still can come with a small/simple peice of software to allow me say like:
+How without writing a interpreter/html-parser, Still can come with a small/simple piece of software to allow me say like:
 `
 var template = HtmlTemplate.make();
 template.generate();
