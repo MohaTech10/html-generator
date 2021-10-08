@@ -1,0 +1,203 @@
+package com.mohdev;
+
+import java.util.ArrayList;
+import java.util.List;
+// So use data structure!;
+
+
+// Soemthing OpeningStructuralTag
+// Use linkedList;
+// While stack holds means ammend
+// if currentIterator is Opening means take the previousOpening.callAmmend("finalREsul"
+
+interface TopLStructureTag {
+    void closeOff(StringBuffer buffer);
+}
+class HtmlTemplate {
+    private final List<HtmlElement> treeNodes;
+    private final StringBuffer outputTemplate;
+    private final HeadTag headTag;
+    private final Body body;
+    private HtmlTemplate() {
+        treeNodes = new ArrayList<>();
+        outputTemplate = new StringBuffer();
+        setup();
+        headTag = HeadTag.make();
+        body = Body.make();
+        treeNodes.add(headTag);
+        treeNodes.add(body);
+    }
+    private void setup() {
+        outputTemplate.append("<!DOCTYPE html>\n");
+        outputTemplate.append("<html>\n");
+    }
+
+    public static HtmlTemplate make() { return new HtmlTemplate(); }
+
+    public void addToBody(HtmlElement htmlElement) { body.push(htmlElement); }
+
+    public void addTopLevelTag(TopLStructureTag topLevelTag) {
+        if (topLevelTag instanceof Body || topLevelTag instanceof HeadTag) {
+            System.out.println("Exit: As far as I know, There's one body tag and head tag in HTML document. That's provided already.");
+            return;
+        }
+        treeNodes.add((HtmlElement) topLevelTag); // TODO: For now this works fine, Assuming all topLevel objects will inherit from HtmlElement as they are tag at the end :)!
+    }
+    public void generateTemplate(boolean toFile) {
+        TopLStructureTag current = null;
+        // TODO: Improve by testing linkedList or Stack to keep track of topLevel tags and close them
+        for (var tag : treeNodes) {
+            if (tag instanceof TopLStructureTag) {
+                if (current != null)
+                    current.closeOff(outputTemplate);
+                current = (TopLStructureTag) tag;
+            }
+            tag.generate(outputTemplate);
+        }
+        assert current != null;
+        current.closeOff(outputTemplate);
+        endofGenerating(toFile);// if any clean up validating before serializing to file.html back to user;
+    }
+
+    private void endofGenerating(boolean toFile) {
+        outputTemplate.append("</html>\n");
+    }
+
+
+    // You could as isBodyWillFormed? shallow
+    // isBodyValidate? // deep
+    // isHeadClosed
+    // headElems!;
+    // Etc!;
+    // You can add more attributes etc/
+
+}
+public abstract class HtmlElement {
+    public abstract void generate(StringBuffer buffer);
+}
+// A group of tags under structural elements
+class StructuralElem extends HtmlElement {
+
+    @Override
+    public void generate(StringBuffer buffer) {
+
+    }
+}
+class TextTag extends HtmlElement {
+    @Override
+    public void generate(StringBuffer buffer) {
+
+    }
+}
+class HeadTag extends StructuralElem implements TopLStructureTag {
+
+    List<HtmlElement> elements;
+    private HeadTag() {
+        elements = new ArrayList<>();
+    }
+
+
+    public static HeadTag make() {
+        return new HeadTag();
+    }
+    public void push(HtmlElement htmlElement) { elements.add(htmlElement); }
+    public void acceptTags(List<HtmlElement> tags) { elements.addAll(tags); }
+
+    @Override
+    public void generate(StringBuffer buffer) {
+        buffer.append("<head>");
+    }
+
+    @Override
+    public void closeOff(StringBuffer buffer) {
+        buffer.append("\n</head>\n");
+    }
+}
+// Now the problem agian basically is that all other parental structyureal can be nested withign html<> so they will be called
+// So we need to have a list to keep track of openOnes so far;
+// <html>
+// <body>
+// <p> a ptr; we don;t need list to go deeper!
+// [openHtmlPosition(index:10), body, head) like this we'll go infinitely
+//
+class Body extends StructuralElem implements TopLStructureTag {
+    List<HtmlElement> elements;
+
+    private Body() {
+        elements = new ArrayList<>();
+    }
+
+
+    public static Body make() {
+        return new Body();
+    }
+    public void push(HtmlElement htmlElement) { elements.add(htmlElement); }
+    public void acceptTags(List<HtmlElement> tags) { elements.addAll(tags); }
+
+    @Override
+    public void generate(StringBuffer buffer) {
+        buffer.append("<body>\n");
+        for ( var nestedTag: elements) {
+            System.out.println("Getting called?");
+            nestedTag.generate(buffer);
+        }
+
+    }
+    public static void main(String[] args) {
+        // TODO: Accept load .html/htm files. So that if html basic template generated! User should say var template = AutoHtm.load(xxx.htm);
+        /*TODO: template.isValidate?->Body, Head, DocType, Html,
+        // template.body.push(Paragraph.make("Hello, World");
+        // ParserResult.VERIFY(template) -> Bug if not a valid html constructs.
+        // template.head.push(Title.staticFactory("Browser"));
+        //
+        *  */
+
+        var template = HtmlTemplate.make();
+        template.addToBody(Paragraph.make("myContent"));
+
+        template.generateTemplate(false);
+        System.out.println(template);
+
+//        var basicTemplate = new HtmlTemplate(/*We should provide bool logical-based decision*/);
+
+//        var body = new Body();
+//        var pTag = Paragraph.make("Should be loaded somehow...");
+//        body.push(pTag);
+//        body.push(pTag);
+//        body.push(pTag);
+//        System.out.println(Arrays.toString(body.elements.toArray()));
+    }
+
+    @Override
+    public void closeOff(StringBuffer buffer) {
+        buffer.append("\n</body>\n");
+        // Now you need to have a linkedList keeps track of those things
+    }
+}
+
+// Think of paired tags, unpaired, self-pair . especially in the formatter object. Thus communication and holding info will be known and store to it;
+// So it knows what to use based on the type that it receives in the massage
+class Paragraph extends TextTag {
+    // A paragraph has style in, id , class, etc!;
+    private final String content;
+    private Paragraph(String content) {
+        // TODO: move logic out of standard constructor
+        this.content = content;
+    }
+
+    public static Paragraph make(String content) {
+        return new Paragraph(content);
+    }
+    @Override
+    public String toString() {
+        return "<p> " + content + " </p>";
+    }
+
+    @Override
+    public void generate(StringBuffer buffer) {
+        buffer.append("<p>").append(content).append("</p>");
+    }
+}
+
+
+// Now the idea is htmlContent creator!
