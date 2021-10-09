@@ -3,6 +3,21 @@ package com.mohdev;
 import java.util.ArrayList;
 import java.util.List;
 
+// We should also classify attribute and map to which tags
+class Attribute {
+}
+class StyleAttr extends Attribute {
+    public String value; // FIXME: StyleAttr has property:value;
+    public StyleAttr() {
+    }
+
+    public void execute() {
+        // TODO: Use REGEX to make sure they're in the right form, i.e,. property: value. And if there's more than one pair make sure separating with `;'
+    }
+    public String represent() {
+        return " style=\"" + value + ";\"";
+    }
+}
 interface TopLStructureTag {
     void closeOff(StringBuffer buffer);
 }
@@ -11,6 +26,7 @@ class HtmlTemplate {
     private final StringBuffer outputTemplate;
     private final HeadTag headTag;
     private final Body body;
+
     private HtmlTemplate() {
         treeNodes = new ArrayList<>();
         outputTemplate = new StringBuffer();
@@ -20,14 +36,19 @@ class HtmlTemplate {
         treeNodes.add(headTag);
         treeNodes.add(body);
     }
+
     private void setup() {
         outputTemplate.append("<!DOCTYPE html>\n");
         outputTemplate.append("<html>\n");
     }
 
-    public static HtmlTemplate make() { return new HtmlTemplate(); }
+    public static HtmlTemplate make() {
+        return new HtmlTemplate();
+    }
 
-    public void addToBody(HtmlElement htmlElement) { body.push(htmlElement); }
+    public void addToBody(HtmlElement htmlElement) {
+        body.push(htmlElement);
+    }
 
     public void addTopLevelTag(TopLStructureTag topLevelTag) {
         if (topLevelTag instanceof Body || topLevelTag instanceof HeadTag) {
@@ -36,6 +57,7 @@ class HtmlTemplate {
         }
         treeNodes.add((HtmlElement) topLevelTag); // TODO: For now this works fine, Assuming all topLevel objects will inherit from HtmlElement as they are tag at the end :)!
     }
+
     public void generateTemplate(boolean toFile) {
         TopLStructureTag current = null;
         // TODO: Improve by testing linkedList or Stack to keep track of topLevel tags and close them
@@ -56,6 +78,10 @@ class HtmlTemplate {
         outputTemplate.append("</html>\n");
     }
 
+    // public void addInlineStyle(HtmlElement tag, String cssValue);
+    public void addInlineStyleBody(String value) {
+        body.addStyleValue(value);
+    }
 }
 public abstract class HtmlElement {
     public abstract void generate(StringBuffer buffer);
@@ -101,7 +127,7 @@ class HeadTag extends StructuralElem implements TopLStructureTag {
 
 class Body extends StructuralElem implements TopLStructureTag {
     List<HtmlElement> elements;
-
+    StyleAttr styleAttr = new StyleAttr();  // Default
     private Body() {
         elements = new ArrayList<>();
     }
@@ -111,18 +137,24 @@ class Body extends StructuralElem implements TopLStructureTag {
     }
     public void push(HtmlElement htmlElement) { elements.add(htmlElement); }
     public void acceptTags(List<HtmlElement> tags) { elements.addAll(tags); }
-
+//    public void addAttribute()
+    public void addStyleValue(String value) {
+        styleAttr.value = value;
+    }
     @Override
     public void generate(StringBuffer buffer) {
-        buffer.append("<body>\n");
-        for ( var nestedTag: elements) {
+        if (styleAttr.value == null)
+            buffer.append("<body>\n");
+        else
+            buffer.append("<body").append(styleAttr.represent()).append(">\n"); // TODO: Validate weather styleValue is even valid, i.e, property/value; standard;
+        for (var nestedTag : elements) {
             System.out.println("Getting called?");
             nestedTag.generate(buffer);
         }
-
     }
     public static void main(String[] args) {
         var template = HtmlTemplate.make();
+        template.addInlineStyleBody("color: red");
         template.addToBody(Paragraph.make("myContent"));
         template.generateTemplate(false);
         /*

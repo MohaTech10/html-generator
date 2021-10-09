@@ -201,3 +201,10 @@ class Paragraph extends TextTag {
 
 
 // Now the idea is htmlContent creator!
+
+
+    // Either make an appropriate interface to add inline attriburtes for body & head tag or just let clients access that body to configure!;
+    // but i don't think that's safe? or preferieng seafety over feeling that's is my own!:
+//    public void addInlineStyle(HtmlElement tag, String value) {
+
+    //    }
