@@ -1,0 +1,19 @@
+
+
+// Attr receives messages about keyName, keyValue ...
+// but it;s another responsibility to keep track of the validation data structure, and algorithm
+
+// Which means we can send attr to other detailes object that take advantage of composition by accessing you and details your object properties to process and control kinda;
+// As a result!; class AttrValidator {
+
+    // Graph like
+    Table<Attr, [HtmlElement]> .. = ["online": [Input, Body, etc..]]
+
+    Table<String,
+validate(Attr, HtmlElement) {
+    // lookup deos the key[attr].elements;
+    return elements.forEach(paramElemen == element;
+    }
+
+    // We need also a represenratiorm for execute i.e formatter!;
+var addElement(Paragraph.make).addAtrr(Attr.make(attrName, <T> anything>
