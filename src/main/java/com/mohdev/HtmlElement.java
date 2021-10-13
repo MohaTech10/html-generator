@@ -3,110 +3,54 @@ package com.mohdev;
 // TODO: Bad design, Very rigid, Everything depends on __inheritance__
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-// We should also classify attribute and map to which tags
-abstract class Attribute {
-
-    public abstract String represent(HtmlElement htmlElement);
-
-}
-class Attr/*TODO: Parameterized <Value>*/ {
-
-
-    enum AttrKind {
-        // We should have someway to recognize/distinguish jsValue;
-        // Actually IDK how this will work.
-        // disabled=boolean, type="string", JsBased=call(), style="comma-separated";
-        BooleanAttr, StringBased, JsBased, CssBased;
-    }
-    String attrName;
-    String value;
-
-    public Attr(String attrName, String value) {
-        this.attrName = attrName;
-        this.value = value;
-    }
-}
-
-// This should validate either one of these cases, Only one:
-/*
-    1- The attribute belongs to the set of elements. See html standard;
-    2- the attribute actually true, i.e, unknown attribute names should be removed.
-    3- if we have an appropriate attribute name!, what about its value! e.g, style="disabled". attrs has set of valid values. See html standard
- */
-class GraphValidator {
-
-    private enum Result {
-        Valid, Invalid, // TODO: InvalidValue;
-    }
-    final private Map<Attr, List<HtmlElement>> validAttrs;
-    final private List<HtmlElement> elements;
-    private GraphValidator() {
-        validAttrs = new HashMap<>();
-        elements = new ArrayList<>();
-    }
-
-    // See usages of system entity Attr, where you can call sub-entity services
-    public Result lookupGraph(Attr attr, HtmlElement element) {
-        // TODO: See weather we have a valid attribute name already
-
-        // Assume: Attr name is valid
-        var elements = validAttrs.get(attr);
-        for (HtmlElement htmlElement : elements) {
-            if (htmlElement.equals(element))
-                return Result.Valid;  // This attr belongs to the passed element param
-        }
-
-        // TODO: Check value validation & move logic from here.
-
-        return Result.Invalid;
-
-    }
-
-    public static GraphValidator make() { return new GraphValidator(); }
-}
-class JSReference {
-
-}
-
-class ScriptBlock {
-    JSReference jsReference;
-
-    // public String callName;
-}
-
-class ScriptableAttr extends Attribute {
-    final ScriptBlock  function = null;// FIXME
-
-    void executeJS() {
-        // Execute/call/link block
-    }
-
-    // TODO: Parameter: An attribute is set to a tag, Yes! However the scope of the project can get rid of this injection by -ignoreValid flag , i.e, User responsible for such input
-    @Override
-    public String represent(HtmlElement htmlElement) {
-        return " online=\"" + "scriptFunction()" + ";\"";
-    }
-}
-
-
-class StyleAttr extends Attribute {
-    public String value; // FIXME: StyleAttr has property:value;
-
-    public StyleAttr() {
-    }
-
-    public void execute() {
-        // TODO: Use REGEX to make sure they're in the right form, i.e,. property: value. And if there's more than one pair make sure separating with `;'
-    }
-
-    public String represent(HtmlElement htmlElement) {
-        return " style=\"" + value + ";\"";
-    }
-}
+//// We should also classify attribute and map to which tags
+//abstract class Attribute {
+//
+//    public abstract String represent(HtmlElement htmlElement);
+//
+//}
+//
+//class JSReference {
+//
+//}
+//
+//class ScriptBlock {
+//    JSReference jsReference;
+//
+//    // public String callName;
+//}
+//
+//class ScriptableAttr extends Attribute {
+//    final ScriptBlock  function = null;// FIXME
+//
+//    void executeJS() {
+//        // Execute/call/link block
+//    }
+//
+//    // TODO: Parameter: An attribute is set to a tag, Yes! However the scope of the project can get rid of this injection by -ignoreValid flag , i.e, User responsible for such input
+//    @Override
+//    public String represent(HtmlElement htmlElement) {
+//        return " online=\"" + "scriptFunction()" + ";\"";
+//    }
+//}
+//
+//
+//class StyleAttr extends Attribute {
+//    public String value; // FIXME: StyleAttr has property:value;
+//
+//    public StyleAttr() {
+//    }
+//
+//    public void execute() {
+//        // TODO: Use REGEX to make sure they're in the right form, i.e,. property: value. And if there's more than one pair make sure separating with `;'
+//    }
+//
+//    public String represent(HtmlElement htmlElement) {
+//        return " style=\"" + value + ";\"";
+//    }
+//}
 
 interface TopLStructureTag {
     void closeOff(StringBuffer buffer);
@@ -177,8 +121,7 @@ class HtmlTemplate {
 }
 
 public abstract class HtmlElement {
-    public abstract void generate(StringBuffer buffer);
-    public abstract void setAttributes(Attribute... attrs);
+    protected abstract void generate(StringBuffer buffer);
     public abstract void setAttributes(Attr... attrs);
 
 }
@@ -191,10 +134,6 @@ class StructuralElem extends HtmlElement {
 
     }
 
-    @Override
-    public void setAttributes(Attribute... attrs) {
-
-    }
 
     @Override
     public void setAttributes(Attr... attrs) {
@@ -205,11 +144,6 @@ class StructuralElem extends HtmlElement {
 class TextTag extends HtmlElement {
     @Override
     public void generate(StringBuffer buffer) {
-
-    }
-
-    @Override
-    public void setAttributes(Attribute... attrs) {
 
     }
 
@@ -253,9 +187,7 @@ class HeadTag extends StructuralElem implements TopLStructureTag {
 
 class Body extends StructuralElem implements TopLStructureTag {
     final List<HtmlElement> elements;
-//    final List<Attribute> attributes;
     final List<Attr> attributes;
-    final StyleAttr styleAttr = new StyleAttr();  // Default
 
     private Body() {
         elements = new ArrayList<>();
@@ -274,11 +206,6 @@ class Body extends StructuralElem implements TopLStructureTag {
         elements.addAll(tags);
     }
 
-    //    public void addAttribute()
-//    public void addAttr(Attribute attribute) {
-//        attributes.add(attribute);
-//    }
-
     public void addAttrs(Attr[] attrs) {
         attributes.addAll(List.of(attrs));
     }
@@ -286,25 +213,15 @@ class Body extends StructuralElem implements TopLStructureTag {
     @Override
     public void generate(StringBuffer buffer) {
         buffer.append("<body");
-        for (var attr : attributes)
-//            buffer.append(attr.represent(this));
+        for (var attr : attributes) {
+            buffer.append(attr.represent(this));
+        }
         // attr.execute.tag.repAppend(" stype
         buffer.append(">\n");
         for (var nestedTag : elements) {
             System.out.println("Getting called?");
             nestedTag.generate(buffer);
         }
-    }
-
-    public static void main(String[] args) {
-        var template = HtmlTemplate.make();
-        template.addAttrsBody(new Attr("online", "js()"));
-        template.addToBody(Paragraph.make("myContent")).setAttributes(new StyleAttr()); // FIXME: Use Builder pattern. ..().buildAttr(..)
-        template.generateTemplate(false);
-        /*
-        Result <!DOCTYPE html> <html> <head> </head> <body online="js()"> <p> myContent </p> </body> </html>
-        Cool for three lines of code
-         */
     }
 
     @Override
@@ -328,15 +245,8 @@ class Paragraph extends TextTag {
     }
 
     @Override
-    public void setAttributes(Attribute... attrs) {
-        // TODO: Remove
-    }
-
-    @Override
     public void setAttributes(Attr... attrs) {
-
-        // Call sites: those who have access the real environment entity, the sys objects. Can call these services thats composed of detailed version of the entity
-
+        // Call sites: those who have access the real environment entity, the sys objects. Can call these services thats composed of detailed version of the entit
         attributes.addAll(List.of(attrs));
     }
 
@@ -348,8 +258,9 @@ class Paragraph extends TextTag {
     @Override
     public void generate(StringBuffer buffer) {
         buffer.append("<p");
-        for (var attr : attributes)
-//            buffer.append(attr.represent(this));
+        for (var attr : attributes) {
+            buffer.append(attr.represent(this));
+        }
         buffer.append(">\n</p>\n");
 
     }
