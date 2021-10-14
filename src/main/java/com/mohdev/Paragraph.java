@@ -34,7 +34,6 @@ public class Paragraph extends TextTag {
         for (var attr : attributes) {
             buffer.append(attr.represent(this));
         }
-        buffer.append(">\n</p>\n");
-
+        buffer.append(">\n").append(content).append("\n</p>\n");
     }
 }
