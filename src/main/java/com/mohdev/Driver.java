@@ -6,10 +6,8 @@ public class Driver {
         var template = HtmlTemplate.make();
         template.addAttrsBody(Attr.make("online", "js()"));
         template.addToBody(Paragraph.make("myContent"))
-                .setAttributes(Attr.make("type", "input"),
-                        Attr.make("placeholder", "Enter name please...")); // FIXME: Use Builder pattern. ..().buildAttr(..)
+                .setAttributes(Attr.make("style", "color:red;"));
 
-
-        template.generateTemplate(false);
+        template.toFile();
     }
 }

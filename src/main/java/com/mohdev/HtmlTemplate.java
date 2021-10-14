@@ -1,6 +1,11 @@
 package com.mohdev;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HtmlTemplate {
@@ -8,6 +13,7 @@ public class HtmlTemplate {
     private final StringBuffer outputTemplate;
     private final HeadTag headTag;
     private final Body body;
+    // modification property to control generating problem
 
     private HtmlTemplate() {
         treeNodes = new ArrayList<>();
@@ -41,7 +47,7 @@ public class HtmlTemplate {
         treeNodes.add((HtmlElement) topLevelTag); // TODO: For now this works fine, Assuming all topLevel objects will inherit from HtmlElement as they are tag at the end :)!
     }
 
-    public void generateTemplate(boolean toFile) {
+    private void generateTemplate() {
         TopLStructureTag current = null;
         // TODO: Improve by testing linkedList or Stack to keep track of topLevel tags and close them
         for (var tag : treeNodes) {
@@ -54,11 +60,23 @@ public class HtmlTemplate {
         }
         assert current != null;
         current.closeOff(outputTemplate);
-        endofGenerating(toFile);// if any clean up validating before serializing to file.html back to user;
+        outputTemplate.append("</html>\n");
     }
 
-    private void endofGenerating(boolean toFile) {
-        outputTemplate.append("</html>\n");
+
+    // Should create file.html corresponding to template created so far.
+    // TODO: Change design of toFile service to better. once this code is called we should validate it
+    public void toFile() {
+        // Move to class FileGenerator to keep track of number of new nodes, content of new nodes and to serve as matcher;
+        generateTemplate();
+        // Validate();
+        var file = Paths.get("index.html");
+        try {
+            Files.write(file, Collections.singleton(outputTemplate), StandardCharsets.UTF_8);
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     // public void addInlineStyle(HtmlElement tag, String cssValue);
