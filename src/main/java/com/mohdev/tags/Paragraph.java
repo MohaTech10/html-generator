@@ -1,4 +1,6 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 import java.util.ArrayList;
 import java.util.List;

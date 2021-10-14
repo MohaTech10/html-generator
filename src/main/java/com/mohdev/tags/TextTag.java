@@ -1,4 +1,6 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 public class TextTag extends HtmlElement {
     @Override

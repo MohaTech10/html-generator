@@ -1,4 +1,6 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

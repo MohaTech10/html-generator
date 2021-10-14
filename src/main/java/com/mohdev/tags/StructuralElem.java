@@ -1,4 +1,6 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 // A group of tags under structural elements
 public class StructuralElem extends HtmlElement {

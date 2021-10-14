@@ -1,4 +1,4 @@
-package com.mohdev;
+package com.mohdev.tags;
 
 //// We should also classify attribute and map to which tags
 //abstract class Attribute {
@@ -46,6 +46,8 @@ package com.mohdev;
 //        return " style=\"" + value + ";\"";
 //    }
 //}
+
+import com.mohdev.attributes.Attr;
 
 public abstract class HtmlElement {
     protected abstract void generate(StringBuffer buffer);
