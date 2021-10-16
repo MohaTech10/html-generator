@@ -1,4 +1,4 @@
-package com.mohdev;
+package com.mohdev.tags;
 
 //// We should also classify attribute and map to which tags
 //abstract class Attribute {
@@ -47,7 +47,10 @@ package com.mohdev;
 //    }
 //}
 
-public abstract class HtmlElement {
+import com.mohdev.attributes.Attr;
+
+// Each element/tag has a list of valid tags.
+public abstract class HtmlTag {
     protected abstract void generate(StringBuffer buffer);
 
     public abstract void setAttributes(Attr... attrs);

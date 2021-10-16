@@ -1,11 +1,11 @@
-package com.mohdev;
+package com.mohdev.tags;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeadTag extends StructuralElem implements TopLStructureTag {
+public class HeadTag extends StructuralTag implements TopLStructureTag {
 
-    final List<HtmlElement> elements;
+    final List<HtmlTag> elements;
 
     private HeadTag() {
         elements = new ArrayList<>();
@@ -16,11 +16,11 @@ public class HeadTag extends StructuralElem implements TopLStructureTag {
         return new HeadTag();
     }
 
-    public void push(HtmlElement htmlElement) {
-        elements.add(htmlElement);
+    public void push(HtmlTag htmlTag) {
+        elements.add(htmlTag);
     }
 
-    public void acceptTags(List<HtmlElement> tags) {
+    public void acceptTags(List<HtmlTag> tags) {
         elements.addAll(tags);
     }
 

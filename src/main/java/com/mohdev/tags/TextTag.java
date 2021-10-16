@@ -1,6 +1,8 @@
-package com.mohdev;
+package com.mohdev.tags;
 
-public class TextTag extends HtmlElement {
+import com.mohdev.attributes.Attr;
+
+public class TextTag extends HtmlTag {
     @Override
     public void generate(StringBuffer buffer) {
 

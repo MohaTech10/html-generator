@@ -1,20 +1,22 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Paragraph extends TextTag {
+public class ParagraphTag extends TextTag {
     private final String content;
     private final List<Attr> attributes;
 
-    private Paragraph(String content) {
+    private ParagraphTag(String content) {
         // TODO: move logic out of standard constructor
         this.content = content;
         attributes = new ArrayList<>();
     }
 
-    public static Paragraph make(String content) {
-        return new Paragraph(content);
+    public static ParagraphTag make(String content) {
+        return new ParagraphTag(content);
     }
 
     @Override

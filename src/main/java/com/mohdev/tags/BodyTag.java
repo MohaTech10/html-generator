@@ -1,26 +1,28 @@
-package com.mohdev;
+package com.mohdev.tags;
+
+import com.mohdev.attributes.Attr;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Body extends StructuralElem implements TopLStructureTag {
-    final List<HtmlElement> elements;
+public class BodyTag extends StructuralTag implements TopLStructureTag {
+    final List<HtmlTag> elements;
     final List<Attr> attributes;
 
-    private Body() {
+    private BodyTag() {
         elements = new ArrayList<>();
         attributes = new ArrayList<>();
     }
 
-    public static Body make() {
-        return new Body();
+    public static BodyTag make() {
+        return new BodyTag();
     }
 
-    public void push(HtmlElement htmlElement) {
-        elements.add(htmlElement);
+    public void push(HtmlTag htmlTag) {
+        elements.add(htmlTag);
     }
 
-    public void acceptTags(List<HtmlElement> tags) {
+    public void acceptTags(List<HtmlTag> tags) {
         elements.addAll(tags);
     }
 
