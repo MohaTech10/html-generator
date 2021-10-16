@@ -49,7 +49,8 @@ package com.mohdev.tags;
 
 import com.mohdev.attributes.Attr;
 
-public abstract class HtmlElement {
+// Each element/tag has a list of valid tags.
+public abstract class HtmlTag {
     protected abstract void generate(StringBuffer buffer);
 
     public abstract void setAttributes(Attr... attrs);

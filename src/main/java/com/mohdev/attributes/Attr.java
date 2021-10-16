@@ -1,11 +1,6 @@
 package com.mohdev.attributes;
 
-import com.mohdev.tags.HtmlElement;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.mohdev.tags.HtmlTag;
 
 public class Attr/*TODO: Parameterized <Value>*/ {
 
@@ -28,7 +23,7 @@ public class Attr/*TODO: Parameterized <Value>*/ {
     public static Attr make(String attrName, String value) { return new Attr(attrName, value); }
 
     // TODO: pull out => Formatters job
-    public String represent(HtmlElement tag) {
+    public String represent(HtmlTag tag) {
         return " " + attrName + "=\"" + value + "\"";
     }
 }

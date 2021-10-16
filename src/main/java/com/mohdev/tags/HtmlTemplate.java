@@ -11,10 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class HtmlTemplate {
-    private final List<HtmlElement> treeNodes;
+    private final List<HtmlTag> treeNodes;
     private final StringBuffer outputTemplate;
     private final HeadTag headTag;
-    private final Body body;
+    private final BodyTag bodyTag;
     // modification property to control generating problem
 
     private HtmlTemplate() {
@@ -22,9 +22,9 @@ public class HtmlTemplate {
         outputTemplate = new StringBuffer();
         setup();
         headTag = HeadTag.make();
-        body = Body.make();
+        bodyTag = BodyTag.make();
         treeNodes.add(headTag);
-        treeNodes.add(body);
+        treeNodes.add(bodyTag);
     }
 
     private void setup() {
@@ -36,17 +36,17 @@ public class HtmlTemplate {
         return new HtmlTemplate();
     }
 
-    public HtmlElement addToBody(HtmlElement htmlElement) {
-        body.push(htmlElement);
-        return htmlElement;
+    public HtmlTag addToBody(HtmlTag htmlTag) {
+        bodyTag.push(htmlTag);
+        return htmlTag;
     }
 
     public void addTopLevelTag(TopLStructureTag topLevelTag) {
-        if (topLevelTag instanceof Body || topLevelTag instanceof HeadTag) {
+        if (topLevelTag instanceof BodyTag || topLevelTag instanceof HeadTag) {
             System.out.println("Exit: As far as I know, There's one body tag and head tag in HTML document. That's provided already.");
             return;
         }
-        treeNodes.add((HtmlElement) topLevelTag); // TODO: For now this works fine, Assuming all topLevel objects will inherit from HtmlElement as they are tag at the end :)!
+        treeNodes.add((HtmlTag) topLevelTag); // TODO: For now this works fine, Assuming all topLevel objects will inherit from HtmlElement as they are tag at the end :)!
     }
 
     private void generateTemplate() {
@@ -83,6 +83,6 @@ public class HtmlTemplate {
 
     // public void addInlineStyle(HtmlElement tag, String cssValue);
     public void addAttrsBody(Attr... attributes) {
-        body.addAttrs(attributes);
+        bodyTag.addAttrs(attributes);
     }
 }

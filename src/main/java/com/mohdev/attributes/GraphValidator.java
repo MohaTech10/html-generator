@@ -1,6 +1,6 @@
 package com.mohdev.attributes;
 
-import com.mohdev.tags.HtmlElement;
+import com.mohdev.tags.HtmlTag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +19,8 @@ public class GraphValidator {
         Valid, Invalid, // TODO: InvalidValue;
     }
 
-    final private Map<Attr, List<HtmlElement>> validAttrs;
-    final private List<HtmlElement> elements;
+    final private Map<Attr, List<HtmlTag>> validAttrs;
+    final private List<HtmlTag> elements;
 
     private GraphValidator() {
         validAttrs = new HashMap<>();
@@ -28,13 +28,13 @@ public class GraphValidator {
     }
 
     // See usages of system entity Attr, where you can call sub-entity services
-    public Result lookupGraph(Attr attr, HtmlElement element) {
+    public Result lookupGraph(Attr attr, HtmlTag element) {
         // TODO: See weather we have a valid attribute name already
 
         // Assume: Attr name is valid
         var elements = validAttrs.get(attr);
-        for (HtmlElement htmlElement : elements) {
-            if (htmlElement.equals(element))
+        for (HtmlTag htmlTag : elements) {
+            if (htmlTag.equals(element))
                 return Result.Valid;  // This attr belongs to the passed element param
         }
 

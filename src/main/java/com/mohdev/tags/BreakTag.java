@@ -2,14 +2,12 @@ package com.mohdev.tags;
 
 import com.mohdev.attributes.Attr;
 
-// A group of tags under structural elements
-public class StructuralElem extends HtmlElement {
+public class BreakTag extends HtmlTag implements UnpairedTag {
 
     @Override
-    public void generate(StringBuffer buffer) {
-
+    protected void generate(StringBuffer buffer) {
+        buffer.append("<br/>");
     }
-
 
     @Override
     public void setAttributes(Attr... attrs) {
