@@ -8,7 +8,7 @@ import java.util.List;
 public class InputTag extends HtmlTag {
 
 
-    private final static String[] VALID_INPUT_ATTR_TYPE = { "text", "password" };
+    private final static String[] VALID_INPUT_ATTR_TYPE = { "text", "password", "submit" };
     private final Attr type; // Non-optional
     private final List<Attr> attributes;
 
