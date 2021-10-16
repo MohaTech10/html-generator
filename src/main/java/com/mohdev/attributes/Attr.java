@@ -26,5 +26,13 @@ public class Attr/*TODO: Parameterized <Value>*/ {
     public String represent(HtmlTag tag) {
         return " " + attrName + "=\"" + value + "\"";
     }
+
+    public String getAttrName() {
+        return attrName;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
 
