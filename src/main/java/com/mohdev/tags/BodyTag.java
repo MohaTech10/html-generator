@@ -39,7 +39,6 @@ public class BodyTag extends StructuralTag implements TopLStructureTag {
         // attr.execute.tag.repAppend(" stype
         buffer.append(">\n");
         for (var nestedTag : elements) {
-            System.out.println("Getting called?");
             nestedTag.generate(buffer);
         }
     }
